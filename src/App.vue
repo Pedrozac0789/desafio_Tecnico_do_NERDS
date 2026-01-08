@@ -1,3 +1,59 @@
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue'
+import MemberForm from './components/MemberForm.vue'
+import MemberList from './components/MemberList.vue'
+
+const members = ref([])
+const search = ref('')
+const editingMember = ref(null)
+
+
+onMounted(() => {
+  const saved = localStorage.getItem('nerds-members')
+  if (saved) {
+    members.value = JSON.parse(saved)
+  }
+})
+
+
+watch(members, (val) => {
+  localStorage.setItem('nerds-members', JSON.stringify(val))
+}, { deep: true })
+
+const filteredMembers = computed(() => {
+  const q = search.value.toLowerCase()
+  if (!q) return members.value
+  return members.value.filter(m =>
+    m.nome.toLowerCase().includes(q) ||
+    m.matricula.toLowerCase().includes(q) ||
+    m.email.toLowerCase().includes(q)
+  )
+})
+
+function handleSave(payload) {
+  if (editingMember.value) {
+    members.value = members.value.map(m =>
+      m.id === editingMember.value.id ? { ...payload, id: m.id } : m
+    )
+    editingMember.value = null
+  } else {
+    members.value.unshift({ ...payload, id: crypto.randomUUID() })
+  }
+}
+
+function startEdit(member) {
+  editingMember.value = { ...member }
+}
+
+function cancelEdit() {
+  editingMember.value = null
+}
+
+function removeMember(id) {
+  members.value = members.value.filter(m => m.id !== id)
+}
+</script>
+
 <template>
   <div class="container">
     <header class="header">
@@ -42,61 +98,7 @@
 </template>
 
 
-<script setup>
-import { ref, computed, watch, onMounted } from 'vue'
-import MemberForm from './components/MemberForm.vue'
-import MemberList from './components/MemberList.vue'
 
-const members = ref([])
-const search = ref('')
-const editingMember = ref(null)
-
-// 🔹 Carregar dados do LocalStorage ao iniciar
-onMounted(() => {
-  const saved = localStorage.getItem('nerds-members')
-  if (saved) {
-    members.value = JSON.parse(saved)
-  }
-})
-
-// 🔹 Sempre que a lista mudar, salvar no LocalStorage
-watch(members, (val) => {
-  localStorage.setItem('nerds-members', JSON.stringify(val))
-}, { deep: true })
-
-const filteredMembers = computed(() => {
-  const q = search.value.toLowerCase()
-  if (!q) return members.value
-  return members.value.filter(m =>
-    m.nome.toLowerCase().includes(q) ||
-    m.matricula.toLowerCase().includes(q) ||
-    m.email.toLowerCase().includes(q)
-  )
-})
-
-function handleSave(payload) {
-  if (editingMember.value) {
-    members.value = members.value.map(m =>
-      m.id === editingMember.value.id ? { ...payload, id: m.id } : m
-    )
-    editingMember.value = null
-  } else {
-    members.value.unshift({ ...payload, id: crypto.randomUUID() })
-  }
-}
-
-function startEdit(member) {
-  editingMember.value = { ...member }
-}
-
-function cancelEdit() {
-  editingMember.value = null
-}
-
-function removeMember(id) {
-  members.value = members.value.filter(m => m.id !== id)
-}
-</script>
 
 
 

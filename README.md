@@ -14,10 +14,14 @@ Aplicação web em Vue 3 para cadastrar, listar e buscar membros do NERDS. Inclu
 
 ```bash
 # Clonar o repositório
-git clone https://seu-repositorio/nerds-membros.git
-cd nerds-membros
+git clone https://github.com/Pedrozac0789/desafio_Tecnico_Do_NERDS.git
+cd desafio_Tecnico_Do_NERDS
 
 # Instalar dependências
 npm install
 # ou
 pnpm install
+
+#codigo para rodar o programa
+npm run dev
+#clique no link  http://localhost:5173/
