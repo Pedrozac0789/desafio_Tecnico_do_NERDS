@@ -14,7 +14,7 @@
 
     <div class="input-group" style="margin-bottom:10px">
       <label for="email">E-mail Institucional *</label>
-      <input id="email" v-model.trim="form.email" type="email" placeholder="nome.sobrenome@nerds.edu.br" />
+      <input id="email" v-model.trim="form.email" type="email" placeholder="nome.sobrenome@alu.ufc.br" />
       <span v-if="errors.email" class="error">{{ errors.email }}</span>
     </div>
 
@@ -30,6 +30,7 @@
     </div>
   </form>
 </template>
+
 <script setup>
 import { reactive, watch, computed } from 'vue'
 
@@ -88,16 +89,16 @@ function validate() {
   if (!form.email) {
     errors.email = 'O e-mail institucional é obrigatório.'
     ok = false
-  } else if (!isEmail(form.email)) {
-    errors.email = 'Informe um e-mail válido.'
+  } else if (!isInstitutionalEmail(form.email)) {
+    errors.email = 'O e-mail deve terminar com @alu.ufc.br.'
     ok = false
   }
 
   return ok
 }
 
-function isEmail(v) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+function isInstitutionalEmail(v) {
+  return /^[^\s@]+@alu\.ufc\.br$/.test(v)
 }
 
 function onSubmit() {
@@ -120,3 +121,6 @@ function clearErrors() {
   errors.email = ''
 }
 </script>
+
+
+
