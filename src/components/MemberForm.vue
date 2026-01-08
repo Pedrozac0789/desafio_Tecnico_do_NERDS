@@ -90,7 +90,7 @@ function validate() {
     errors.email = 'O e-mail institucional é obrigatório.'
     ok = false
   } else if (!isInstitutionalEmail(form.email)) {
-    errors.email = 'O email deve terminar com @alu.ufc.br.'
+    errors.email = "O email deve terminar com @alu.ufc.br."
     ok = false
   }
 
